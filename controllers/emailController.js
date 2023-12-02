@@ -1,10 +1,10 @@
 import nodemailer from 'nodemailer'
-import User from '../models/User.js'
+import UserCheck from '../models/UserCheck.js'
 import ReporteCorreo from '../models/ReporteCorreo.js'
 
 export const sendEmail = async (req, res) => {
   try {
-    let transporter = nodemailer.createTransport({
+    const transporter = nodemailer.createTransport({
       host: process.env.AWS_SES_HOST,
       port: 587,
       secure: false,
@@ -14,12 +14,12 @@ export const sendEmail = async (req, res) => {
       },
     })
 
-    let organismoBuscado = 'universidad-puma'
-    let users = await User.find({ organismo: organismoBuscado })
-    let emails = users.map((user) => user.email).join(',')
+    const organismoBuscado = 'universidad-puma'
+    const users = await UserCheck.find({ organismo: organismoBuscado })
+    const emails = users.map((user) => user.email).join(',')
 
     if (emails.length > 0) {
-      let info = await transporter.sendMail({
+      const info = await transporter.sendMail({
         from: process.env.SENDER_EMAIL,
         to: emails,
         subject: req.body.subject,
@@ -27,7 +27,7 @@ export const sendEmail = async (req, res) => {
         html: `<p>${req.body.html}</p>`,
       })
 
-      let reporte = new ReporteCorreo({
+      const reporte = new ReporteCorreo({
         subject: req.body.subject,
         text: req.body.text,
         html: req.body.html,

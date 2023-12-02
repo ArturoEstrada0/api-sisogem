@@ -1,7 +1,7 @@
-import express from 'express'
+import { Router } from 'express'
 import { sendEmail } from '../controllers/emailController.js'
 
-const router = express.Router()
+const router = Router()
 
 router.post('/', sendEmail)
 

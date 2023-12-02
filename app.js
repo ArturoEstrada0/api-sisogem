@@ -4,6 +4,7 @@ import dotenv from 'dotenv'
 import mongoose from 'mongoose'
 import reportesRoutes from './routes/reportes.js'
 import emailRoutes from './routes/email.js'
+import userRoutes from './routes/user.js'
 
 dotenv.config()
 
@@ -19,5 +20,6 @@ mongoose
 
 app.use('/reportes', reportesRoutes)
 app.use('/email', emailRoutes)
+app.use('/api', userRoutes)
 
 export default app

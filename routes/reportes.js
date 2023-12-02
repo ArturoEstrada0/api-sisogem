@@ -1,10 +1,10 @@
-import express from 'express'
+import { Router } from 'express'
 import {
   getReportes,
   deleteReporte,
 } from '../controllers/reportesController.js'
 
-const router = express.Router()
+const router = Router()
 
 router.get('/', getReportes)
 router.delete('/:id', deleteReporte)
