@@ -4,10 +4,11 @@ import Sesion from '../models/sesion.js'
 import {
   findUserByEmail,
   deleteUserById,
+  createUser,
 } from '../controllers/userController.js'
 
 const router = Router()
-
+//ACTUALIZAR
 // Crear usuario
 router.post('/users', (req, res) => {
   const user = userSchema(req.body)
@@ -25,6 +26,26 @@ router.get('/users', (req, res) => {
     .catch((error) => res.json({ message: error }))
 })
 
+router.get('/listUser/:organismo', async (req, res) => {
+  const organismoBuscar = req.params.organismo
+  console.log(organismoBuscar)
+  await userSchema
+    .find()
+    .populate('organismo')
+    .populate('rol')
+    .exec((err, data) => {
+      if (err) res.status(500)
+      const usersToReturn = data.filter((user) => {
+        if (!user.organismo) return false
+        for (const organismoUser of user.organismo) {
+          if (organismoUser.code == organismoBuscar) return true
+        }
+        return false
+      })
+      res.json(usersToReturn)
+    })
+})
+
 // Obtener un usuario por ID
 router.get('/users/:id', (req, res) => {
   const { id } = req.params
@@ -36,6 +57,8 @@ router.get('/users/:id', (req, res) => {
 
 // Buscar usuario por correo electrónico
 router.post('/user/email', findUserByEmail)
+
+router.post('/user/create-user', createUser)
 
 // Eliminar un usuario por ID
 router.delete('/users/:id', deleteUserById)

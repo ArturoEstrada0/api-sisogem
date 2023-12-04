@@ -5,16 +5,34 @@ const userSchema = mongoose.Schema({
     type: String,
     required: true,
   },
-  age: {
-    type: Number,
+
+  rol: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'RolSchema',
+  },
+  organismo: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'OrganismSchema',
+    },
+  ],
+
+  full_charge: {
+    type: String,
     required: true,
   },
+
   email: {
     type: String,
     required: true,
   },
+
+  date: {
+    type: Number,
+    required: true,
+  },
 })
 
-const user = mongoose.model('User', userSchema)
+const User = mongoose.model('User', userSchema)
 
-export default user
+export default User

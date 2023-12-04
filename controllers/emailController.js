@@ -1,6 +1,7 @@
 import nodemailer from 'nodemailer'
-import UserCheck from '../models/UserCheck.js'
+import User from '../models/user.js'
 import ReporteCorreo from '../models/ReporteCorreo.js'
+import Organismo from '../models/organism.js'
 
 export const sendEmail = async (req, res) => {
   try {
@@ -14,9 +15,18 @@ export const sendEmail = async (req, res) => {
       },
     })
 
-    const organismoBuscado = 'universidad-puma'
-    const users = await UserCheck.find({ organismo: organismoBuscado })
+    const organismoCode = req.body.organismo
+    console.log(organismoCode)
+    const organismo = await Organismo.findOne({ code: organismoCode })
+    if (!organismo) {
+      console.log('No se encontro el organismo')
+      return
+    }
+
+    const organismoId = organismo._id
+    const users = await User.find({ organismo: { $in: [organismoId] } })
     const emails = users.map((user) => user.email).join(',')
+    console.log(emails)
 
     if (emails.length > 0) {
       const info = await transporter.sendMail({
@@ -31,6 +41,7 @@ export const sendEmail = async (req, res) => {
         subject: req.body.subject,
         text: req.body.text,
         html: req.body.html,
+        organismo: req.body.organismo,
         sentAt: new Date(),
       })
 

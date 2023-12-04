@@ -4,6 +4,7 @@ const reporteCorreoSchema = new mongoose.Schema({
   subject: String,
   text: String,
   html: String,
+  organismo: String,
   sentAt: Date,
 })
 
