@@ -28,20 +28,19 @@ router.get('/users', (req, res) => {
 router.get('/listUser/:organismo', async (req, res) => {
   const organismoBuscar = req.params.organismo
   console.log(organismoBuscar)
-  await User.find()
-    .populate('organismo')
-    .populate('rol')
-    .exec((err, data) => {
-      if (err) res.status(500)
-      const usersToReturn = data.filter((user) => {
-        if (!user.organismo) return false
-        for (const organismoUser of user.organismo) {
-          if (organismoUser.code == organismoBuscar) return true
-        }
-        return false
-      })
-      res.json(usersToReturn)
+  try {
+    const data = await User.find().populate('organismo').populate('rol').exec()
+    const usersToReturn = data.filter((user) => {
+      if (!user.organismo) return false
+      for (const organismoUser of user.organismo) {
+        if (organismoUser.code == organismoBuscar) return true
+      }
+      return false
     })
+    res.json(usersToReturn)
+  } catch (err) {
+    res.status(500).send(err)
+  }
 })
 
 // Obtener un usuario por ID
