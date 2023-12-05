@@ -8,6 +8,6 @@ const sesionSchema = new mongoose.Schema({
   enProgreso: Boolean,
 })
 
-const sesion = mongoose.model('Sesion', sesionSchema)
+const Sesion = mongoose.model('Sesion', sesionSchema)
 
-export default sesion
+export default Sesion

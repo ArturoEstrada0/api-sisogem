@@ -24,8 +24,8 @@ mongoose
 //Middlewares
 app.use('/reportes', reportesRoutes)
 app.use('/email', emailRoutes)
-app.use('/api', userRoutes)
-app.use('/api', rolRoutes)
-app.use('/api', organismoRoutes)
+app.use('/user', userRoutes)
+app.use('/rol', rolRoutes)
+app.use('/organismo', organismoRoutes)
 
 export default app

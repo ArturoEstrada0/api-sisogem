@@ -1,6 +1,6 @@
-import RolSchema from '../models/rol.js'
+import Rol from '../models/rol.js'
 
 export const getRoles = async (req, res) => {
-  const roles = await RolSchema.find()
+  const roles = await Rol.find()
   res.json(roles)
 }

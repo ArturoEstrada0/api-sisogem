@@ -1,8 +1,8 @@
 import { Router } from 'express'
-import { getRoles } from '../controllers/rolcontroller.js'
+import { getRoles } from '../controllers/rolController.js'
 
 const router = Router()
 
-router.get('/roles', getRoles)
+router.get('/', getRoles)
 
 export default router

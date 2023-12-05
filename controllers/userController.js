@@ -1,29 +1,24 @@
-import userSchema from '../models/user.js'
-import OrganismSchema from '../models/organism.js'
+import User from '../models/user.js'
+import Organismo from '../models/organism.js'
 
-export const findUserByEmail = (req, res) => {
+export const findUserByEmail = async (req, res) => {
   const { email } = req.body
-  userSchema
-    .find({ email })
-    .then((data) => {
-      return res.json(data)
-    })
-    .catch((error) => res.json({ message: error }))
-}
-
-export const deleteUserById = (req, res) => {
-  const { id } = req.params
-  userSchema
-    .remove({ _id: id })
-    .then((data) => res.json(data))
-    .catch((error) => res.json({ message: error }))
+  try {
+    const usuario = await User.find({ email })
+      .populate('organismo')
+      .populate('rol')
+      .exec()
+    res.json(usuario.pop())
+  } catch (err) {
+    res.status(500).send(err)
+  }
 }
 
 export const createUser = async (req, res) => {
   const userFromReq = req.body
-  const mongoOrg = await OrganismSchema.findById(userFromReq.organismo)
+  const mongoOrg = await Organismo.findById(userFromReq.organismo)
 
-  const newUser = new UserSchema({
+  const newUser = new User({
     name: userFromReq.name,
     rol: userFromReq.rol,
     full_charge: userFromReq.full_charge,
@@ -38,4 +33,11 @@ export const createUser = async (req, res) => {
     console.log(error)
     res.status(500).send('Ocurrió un error')
   }
+}
+
+export const deleteUserById = (req, res) => {
+  const { id } = req.params
+  User.remove({ _id: id })
+    .then((data) => res.json(data))
+    .catch((error) => res.json({ message: error }))
 }

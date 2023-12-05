@@ -1,5 +1,5 @@
 import { Router } from 'express'
-import userSchema from '../models/user.js'
+import User from '../models/user.js'
 import Sesion from '../models/sesion.js'
 import {
   findUserByEmail,
@@ -8,10 +8,10 @@ import {
 } from '../controllers/userController.js'
 
 const router = Router()
-//ACTUALIZAR
+
 // Crear usuario
 router.post('/users', (req, res) => {
-  const user = userSchema(req.body)
+  const user = User(req.body)
   user
     .save()
     .then((data) => res.json(data))
@@ -20,8 +20,7 @@ router.post('/users', (req, res) => {
 
 // Obtener todos los usuarios
 router.get('/users', (req, res) => {
-  userSchema
-    .find()
+  User.find()
     .then((data) => res.json(data))
     .catch((error) => res.json({ message: error }))
 })
@@ -29,8 +28,7 @@ router.get('/users', (req, res) => {
 router.get('/listUser/:organismo', async (req, res) => {
   const organismoBuscar = req.params.organismo
   console.log(organismoBuscar)
-  await userSchema
-    .find()
+  await User.find()
     .populate('organismo')
     .populate('rol')
     .exec((err, data) => {
@@ -49,16 +47,15 @@ router.get('/listUser/:organismo', async (req, res) => {
 // Obtener un usuario por ID
 router.get('/users/:id', (req, res) => {
   const { id } = req.params
-  userSchema
-    .findById(id)
+  User.findById(id)
     .then((data) => res.json(data))
     .catch((error) => res.json({ message: error }))
 })
 
 // Buscar usuario por correo electrónico
-router.post('/user/email', findUserByEmail)
+router.post('/email', findUserByEmail)
 
-router.post('/user/create-user', createUser)
+router.post('/create-user', createUser)
 
 // Eliminar un usuario por ID
 router.delete('/users/:id', deleteUserById)
@@ -67,8 +64,7 @@ router.delete('/users/:id', deleteUserById)
 router.put('/users/:id', (req, res) => {
   const { id } = req.params
   const { name, age, email } = req.body
-  userSchema
-    .updateOne({ _id: id }, { $set: { name, age, email } })
+  User.updateOne({ _id: id }, { $set: { name, age, email } })
     .then((data) => res.json(data))
     .catch((error) => res.json({ message: error }))
 })
