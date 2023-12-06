@@ -30,7 +30,7 @@ export const sendEmail = async (req, res) => {
 
     if (emails.length > 0) {
       const info = await transporter.sendMail({
-        from: process.env.SENDER_EMAIL,
+        from: 'wlinx11@gmail.com',
         to: emails,
         subject: req.body.subject,
         text: req.body.text,
@@ -61,6 +61,10 @@ export const sendEmail = async (req, res) => {
       })
     }
   } catch (error) {
+    res.status(500).json({
+      ok: false,
+      message: 'Ocurrio un error al enviar el correo',
+    })
     console.error(error)
   }
 }
